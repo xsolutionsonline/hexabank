@@ -56,6 +56,13 @@ La Entidad de Dominio (Account) tiene lógica de negocio y es TypeScript puro.
 
 La Entidad de Infraestructura (AccountSchema o AccountOrmEntity) tiene decoradores @Entity(), @Column(), etc.
 
-**Mapper:** Es una clase sencilla que traduce de un mundo al otro. El repositorio de infraestructura recibe una entidad de dominio, la mapea a una de ORM para guardarla, y viceversa.
+**Concepto Teórico: Mapeo de Datos (Data Mapper)**
+Según nuestro manifiesto, el Dominio no debe conocer al ORM.
+
+**Entidad de Dominio (Account):** Contiene la lógica (withdraw). No tiene decoradores.
+
+**Entidad ORM (AccountOrmEntity):** Es solo un esquema de base de datos. Tiene decoradores @Entity().
+
+**El Mapper:** Es el traductor. Evita que los detalles de la base de datos (como si un campo se llama owner_id o ownerId) contaminen tu lógica de negocio.
 
 **Data Source:** Usaremos TypeORM, que es el estándar de oro en NestJS para bases de datos SQL.
