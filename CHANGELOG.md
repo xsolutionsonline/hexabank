@@ -17,11 +17,14 @@ cd hexabank
 
 # 4. Instalar librerías de validación
 npm install class-validator class-transformer
+
+# 5. Instalar TypeORM y controlador de SQLite
+npm install @nestjs/typeorm typeorm sqlite3
 ```
 
 ---
 
-## [Unreleased] - Hitos 1 al 4 Completados
+## [Unreleased] - Hitos 1 al 5 Completados
 
 ### 🎯 Hito 1: Capa de Dominio (Domain Layer)
 Se estableció el núcleo de la aplicación, aislado de cualquier framework o base de datos.
@@ -57,5 +60,11 @@ Se aseguró la integridad de los datos en la entrada de la aplicación.
   - `transform: true`: Convierte automáticamente los tipos (ej. strings numéricos a numbers).
 - **Integración:** Actualización de `AccountsController` para consumir el DTO oficial en lugar del contrato temporal.
 
+### 💾 Hito 5: Persistencia Real (TypeORM y Patrón Mapper)
+Se implementó la conexión a una base de datos real (SQLite) mediante TypeORM, manteniendo estricta separación con el Dominio.
+- **Entidad ORM (`AccountOrmEntity`):** Entidad de infraestructura exclusiva para TypeORM (`@Entity('accounts')`) sin lógica de negocio.
+- **Mapper (`AccountMapper`):** Clase de transformación bidireccional entre la entidad del ORM y la entidad de Dominio (`toDomain`, `toOrm`).
+- **Adaptador Real (`TypeOrmAccountRepository`):** Nueva implementación de la interfaz `AccountRepository` usando el `Repository` nativo de TypeORM, inyectado mediante `@InjectRepository(AccountOrmEntity)`.
+
 ---
-*Próximos pasos: Pendiente de definición.*
+*Próximos pasos: Configuración de Base de Datos en módulos.*
