@@ -2,6 +2,23 @@
 
 Este archivo documenta el progreso del desarrollo de la API de Hexabank utilizando Arquitectura Hexagonal y NestJS.
 
+## Requisitos Previos e Instalación
+Para llegar al estado actual de este proyecto desde cero, se ejecutaron los siguientes comandos:
+
+```bash
+# 1. Instalar la CLI de NestJS globalmente (si no la tienes)
+npm i -g @nestjs/cli
+
+# 2. Crear el proyecto base
+nest new hexabank
+
+# 3. Entrar a la carpeta del proyecto
+cd hexabank
+```
+*(Nota: Hasta este punto, no se han instalado librerías externas de base de datos o validación, solo las dependencias por defecto de NestJS).*
+
+---
+
 ## [Unreleased] - Hitos 1, 2 y 3 Completados
 
 ### 🎯 Hito 1: Capa de Dominio (Domain Layer)
