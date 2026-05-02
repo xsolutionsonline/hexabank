@@ -11,10 +11,7 @@ import {
 import { WithdrawMoneyService } from '../../application/withdraw-money.service';
 import { AccountNotFoundException } from '../../domain/exceptions/account-not-found.exception';
 import { InsufficientFundsException } from '../../domain/exceptions/insufficient-funds.exception';
-
-export class WithdrawDto {
-  amount: number;
-}
+import { WithdrawDto } from './dto/withdraw.dto';
 
 @Controller('accounts')
 export class AccountsController {

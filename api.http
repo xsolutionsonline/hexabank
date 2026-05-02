@@ -3,5 +3,5 @@ POST http://localhost:3000/accounts/123/withdraw
 Content-Type: application/json
 
 {
-  "amount": "A50"
+  "amount": 100
 }
