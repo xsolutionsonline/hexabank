@@ -1,3 +1,5 @@
+import { InsufficientFundsException } from './exceptions/insufficient-funds.exception';
+
 export class Account {
   constructor(
     public id: string,
@@ -6,8 +8,9 @@ export class Account {
   ) {}
 
   withdraw(amount: number): void {
-    if (this.balance >= amount) {
-      this.balance -= amount;
+    if (this.balance < amount) {
+      throw new InsufficientFundsException();
     }
+    this.balance -= amount;
   }
 }
