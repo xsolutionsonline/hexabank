@@ -66,3 +66,19 @@ Según nuestro manifiesto, el Dominio no debe conocer al ORM.
 **El Mapper:** Es el traductor. Evita que los detalles de la base de datos (como si un campo se llama owner_id o ownerId) contaminen tu lógica de negocio.
 
 **Data Source:** Usaremos TypeORM, que es el estándar de oro en NestJS para bases de datos SQL.
+
+---
+
+## Hito 6: Testing Unitario Senior (Jest & Mocks)
+**Concepto Teórico: El Aislamiento en las Pruebas**
+Según nuestro Manifiesto de Arquitectura y el Documento de Testing, los tests unitarios son la base de la pirámide (60-70%).
+
+**¿Qué testeamos?:** No testeamos TypeORM ni NestJS (ellos ya tienen sus propios tests). Testeamos NUESTRA lógica: el WithdrawMoneyService y la entidad Account.
+
+**Mocks con jest.fn():** En un test unitario, está prohibido tocar la base de datos (incluso SQLite). Usamos "dobles de prueba" (Mocks) para simular el comportamiento del repositorio.
+
+**Patrón AAA (Arrange, Act, Assert):**
+
+- **Arrange:** Preparamos el escenario (creamos una cuenta mock).
+- **Act:** Ejecutamos la acción (llamamos al método execute del servicio).
+- **Assert:** Verificamos el resultado (¿el balance bajó?, ¿se llamó al método .save()?).

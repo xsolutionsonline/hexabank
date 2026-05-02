@@ -24,7 +24,7 @@ npm install @nestjs/typeorm typeorm sqlite3
 
 ---
 
-## [Unreleased] - Hitos 1 al 5 Completados
+## [Unreleased] - Hitos 1 al 6 Completados
 
 ### 🎯 Hito 1: Capa de Dominio (Domain Layer)
 Se estableció el núcleo de la aplicación, aislado de cualquier framework o base de datos.
@@ -66,5 +66,11 @@ Se implementó la conexión a una base de datos real (SQLite) mediante TypeORM, 
 - **Mapper (`AccountMapper`):** Clase de transformación bidireccional entre la entidad del ORM y la entidad de Dominio (`toDomain`, `toOrm`).
 - **Adaptador Real (`TypeOrmAccountRepository`):** Nueva implementación de la interfaz `AccountRepository` usando el `Repository` nativo de TypeORM, inyectado mediante `@InjectRepository(AccountOrmEntity)`.
 
+### 🧪 Hito 6: Testing Unitario Senior (Jest & Mocks)
+Se implementaron pruebas automatizadas independientes y confiables que garantizan la calidad del código mediante el uso del patrón AAA (Arrange, Act, Assert).
+- **Mocks Completos:** Uso de `jest.fn()` para simular el comportamiento del repositorio de cuentas (`findById`, `save`) e inyectarlo en el entorno de pruebas de NestJS usando el token `'ACCOUNT_REPOSITORY'`.
+- **Caso de Éxito (Success Case):** Verificación estricta de que el servicio de retiro (WithdrawMoneyService) busque la cuenta adecuada, modifique el balance correctamente en memoria y asegure de llamar a `.save()` en el repositorio mock.
+- **Caso de Error (Failure Case):** Garantizar que si no se encuentra la cuenta, el sistema lance la excepción apropiada (`AccountNotFoundException`) y se compruebe que no se realice ningún llamado a `.save()`.
+
 ---
-*Próximos pasos: Configuración de Base de Datos en módulos.*
+*Próximos pasos: Hito 7 (Microservicios y Kafka).*
