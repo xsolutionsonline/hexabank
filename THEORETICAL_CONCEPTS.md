@@ -43,3 +43,19 @@ Según nuestro Manifiesto de Arquitectura, la integridad de los datos es innegoc
 **ValidationPipe:** Es un Pipe (tubo) de NestJS que intercepta la petición, valida los datos contra el DTO y, si algo falla, devuelve un 400 Bad Request automáticamente sin llegar siquiera al servicio.
 
 **Whitelist & Forbidden:** Un Senior configura el Pipe para que borre cualquier propiedad que no esté definida en el DTO (ej. si el cliente intenta inyectar un campo role: 'admin').
+
+---
+
+## Hito 5: Persistencia Real (TypeORM y el Patrón Mapper)
+**Concepto Teórico: Desacoplamiento de Persistencia**
+Hasta ahora hemos usado un repositorio en memoria. Para pasar a una base de datos real (PostgreSQL/MySQL), un Senior sigue la regla del Manifiesto de Arquitectura: el servicio no debe cambiar aunque cambiemos la base de datos.
+
+**Entidad de Dominio vs. Entidad de ORM:** Aquí es donde muchos fallan.
+
+La Entidad de Dominio (Account) tiene lógica de negocio y es TypeScript puro.
+
+La Entidad de Infraestructura (AccountSchema o AccountOrmEntity) tiene decoradores @Entity(), @Column(), etc.
+
+**Mapper:** Es una clase sencilla que traduce de un mundo al otro. El repositorio de infraestructura recibe una entidad de dominio, la mapea a una de ORM para guardarla, y viceversa.
+
+**Data Source:** Usaremos TypeORM, que es el estándar de oro en NestJS para bases de datos SQL.
