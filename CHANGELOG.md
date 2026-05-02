@@ -14,12 +14,14 @@ nest new hexabank
 
 # 3. Entrar a la carpeta del proyecto
 cd hexabank
+
+# 4. Instalar librerías de validación
+npm install class-validator class-transformer
 ```
-*(Nota: Hasta este punto, no se han instalado librerías externas de base de datos o validación, solo las dependencias por defecto de NestJS).*
 
 ---
 
-## [Unreleased] - Hitos 1, 2 y 3 Completados
+## [Unreleased] - Hitos 1 al 4 Completados
 
 ### 🎯 Hito 1: Capa de Dominio (Domain Layer)
 Se estableció el núcleo de la aplicación, aislado de cualquier framework o base de datos.
@@ -46,5 +48,14 @@ Se implementaron los adaptadores tecnológicos y la comunicación hacia el exter
 - **Integración:** Importación de `AccountsModule` en el `AppModule` principal manteniendo un encapsulamiento estricto.
 - **Testing:** Creación del archivo `api.http` en la raíz del proyecto para probar el endpoint desde clientes HTTP de IDEs.
 
+### 🛡️ Hito 4: Contratos y Validación (DTOs & Pipes)
+Se aseguró la integridad de los datos en la entrada de la aplicación.
+- **DTOs (`WithdrawDto`):** Creación del contrato de datos para el retiro de dinero, utilizando decoradores (`@IsNotEmpty`, `@IsNumber`, `@IsPositive`) para definir reglas estrictas en `amount`.
+- **Configuración Global de Validación (`main.ts`):** Integración de `ValidationPipe` en toda la aplicación con las reglas:
+  - `whitelist: true`: Filtra propiedades no definidas en el DTO.
+  - `forbidNonWhitelisted: true`: Bloquea peticiones con propiedades extras.
+  - `transform: true`: Convierte automáticamente los tipos (ej. strings numéricos a numbers).
+- **Integración:** Actualización de `AccountsController` para consumir el DTO oficial en lugar del contrato temporal.
+
 ---
-*Próximos pasos: Hito 4 (Validación con DTOs y Pipes).*
+*Próximos pasos: Pendiente de definición.*

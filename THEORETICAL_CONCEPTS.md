@@ -31,3 +31,15 @@ Según nuestro Manifiesto de Arquitectura, la infraestructura es un "detalle té
 **Adaptadores de Entrada (Controladores):** Son los que exponen nuestro Caso de Uso al exterior (HTTP/REST).
 
 **Mapeo de Datos:** Un error común es usar la misma clase para la DB y para el Dominio. Un Senior prefiere separar la AccountSchema (entidad del ORM) de la Account (entidad de negocio) y usar un Mapper para pasar de una a otra.
+
+---
+
+## Hito 4: Contratos, Validación y Transformación (DTOs & Pipes)
+**Concepto Teórico: La Integridad como Norma**
+Según nuestro Manifiesto de Arquitectura, la integridad de los datos es innegociable. No permitimos que "cualquier cosa" entre a nuestros Casos de Uso.
+
+**DTO (Data Transfer Object):** Es un objeto que define estrictamente el formato de los datos que viajan por la red. Es el "contrato" entre el cliente y el servidor.
+
+**ValidationPipe:** Es un Pipe (tubo) de NestJS que intercepta la petición, valida los datos contra el DTO y, si algo falla, devuelve un 400 Bad Request automáticamente sin llegar siquiera al servicio.
+
+**Whitelist & Forbidden:** Un Senior configura el Pipe para que borre cualquier propiedad que no esté definida en el DTO (ej. si el cliente intenta inyectar un campo role: 'admin').
