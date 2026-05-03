@@ -82,3 +82,17 @@ Según nuestro Manifiesto de Arquitectura y el Documento de Testing, los tests u
 - **Arrange:** Preparamos el escenario (creamos una cuenta mock).
 - **Act:** Ejecutamos la acción (llamamos al método execute del servicio).
 - **Assert:** Verificamos el resultado (¿el balance bajó?, ¿se llamó al método .save()?).
+
+---
+
+## Hito 7: Microservicios y Comunicación Asíncrona (Kafka)
+**Concepto Teórico: Event-Driven Architecture (EDA)**
+Según nuestro documento de Microservicios y Escalabilidad, cuando un sistema crece, pasamos de llamadas directas a Eventos.
+
+**Core vs. Notificaciones:** Imagina que cada vez que alguien retira dinero, queremos enviar un email. Si el servicio de email cae, no queremos que el retiro falle.
+
+**Productores y Consumidores:**
+* El microservicio de Accounts será el Productor: publicará un evento llamado `money.withdrawn`.
+* El microservicio de Notifications será el Consumidor: escuchará ese evento y enviará el aviso.
+
+**Kafka como Message Broker:** Es el estándar de oro para alta concurrencia. Kafka guarda los eventos en un log, permitiendo que si un servicio se apaga, al encenderse pueda procesar lo que tiene pendiente (resiliencia).
