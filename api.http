@@ -1,5 +1,17 @@
-### Realizar retiro de dinero
-POST http://localhost:3000/accounts/123/withdraw
+### Crear una nueva cuenta
+POST http://localhost:3000/accounts
+Content-Type: application/json
+
+{
+  "ownerId": "user-1234",
+  "initialBalance": 1000
+}
+
+### Obtener saldo de una cuenta por ID (reemplazar con el ID devuelto al crear la cuenta)
+GET http://localhost:3000/accounts/c413000f-cd49-4041-94bd-d775bde117ae/balance
+
+### Realizar retiro de dinero (reemplazar con el ID devuelto al crear la cuenta)
+POST http://localhost:3000/accounts/c413000f-cd49-4041-94bd-d775bde117ae/withdraw
 Content-Type: application/json
 
 {

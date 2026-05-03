@@ -66,3 +66,33 @@ Según nuestro manifiesto, el Dominio no debe conocer al ORM.
 **El Mapper:** Es el traductor. Evita que los detalles de la base de datos (como si un campo se llama owner_id o ownerId) contaminen tu lógica de negocio.
 
 **Data Source:** Usaremos TypeORM, que es el estándar de oro en NestJS para bases de datos SQL.
+
+---
+
+## Hito 6: Testing Unitario Senior (Jest & Mocks)
+**Concepto Teórico: El Aislamiento en las Pruebas**
+Según nuestro Manifiesto de Arquitectura y el Documento de Testing, los tests unitarios son la base de la pirámide (60-70%).
+
+**¿Qué testeamos?:** No testeamos TypeORM ni NestJS (ellos ya tienen sus propios tests). Testeamos NUESTRA lógica: el WithdrawMoneyService y la entidad Account.
+
+**Mocks con jest.fn():** En un test unitario, está prohibido tocar la base de datos (incluso SQLite). Usamos "dobles de prueba" (Mocks) para simular el comportamiento del repositorio.
+
+**Patrón AAA (Arrange, Act, Assert):**
+
+- **Arrange:** Preparamos el escenario (creamos una cuenta mock).
+- **Act:** Ejecutamos la acción (llamamos al método execute del servicio).
+- **Assert:** Verificamos el resultado (¿el balance bajó?, ¿se llamó al método .save()?).
+
+---
+
+## Hito 7: Microservicios y Comunicación Asíncrona (Kafka)
+**Concepto Teórico: Event-Driven Architecture (EDA)**
+Según nuestro documento de Microservicios y Escalabilidad, cuando un sistema crece, pasamos de llamadas directas a Eventos.
+
+**Core vs. Notificaciones:** Imagina que cada vez que alguien retira dinero, queremos enviar un email. Si el servicio de email cae, no queremos que el retiro falle.
+
+**Productores y Consumidores:**
+* El microservicio de Accounts será el Productor: publicará un evento llamado `money.withdrawn`.
+* El microservicio de Notifications será el Consumidor: escuchará ese evento y enviará el aviso.
+
+**Kafka como Message Broker:** Es el estándar de oro para alta concurrencia. Kafka guarda los eventos en un log, permitiendo que si un servicio se apaga, al encenderse pueda procesar lo que tiene pendiente (resiliencia).
