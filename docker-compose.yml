@@ -1,4 +1,16 @@
 services:
+  postgres:
+    image: postgres:15
+    container_name: hexabank-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: hexabank
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     container_name: hexabank-kafka
@@ -19,3 +31,6 @@ services:
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
       KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
       CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+
+volumes:
+  postgres_data:
