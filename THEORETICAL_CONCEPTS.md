@@ -24,7 +24,7 @@ Según nuestro Manifiesto de Arquitectura, la Capa de Aplicación contiene los S
 
 ## Hito 3: Capa de Infraestructura (Adaptadores y Persistencia)
 **Concepto Teórico: El Patrón Repositorio y el Desacoplamiento**
-Según nuestro Manifiesto de Arquitectura, la infraestructura es un "detalle técnico". Aquí es donde implementamos los Puertos que definimos en el Dominio.
+According to our Manifiesto de Arquitectura, la infraestructura es un "detalle técnico". Aquí es donde implementamos los Puertos que definimos en el Dominio.
 
 **Adaptadores de Salida (Persistencia):** Es la clase que implementa la interfaz AccountRepository. Aquí sí podemos usar TypeORM, Prisma o incluso un simple mapa en memoria para empezar.
 
@@ -170,3 +170,27 @@ Basándonos en nuestros documentos:
 **Integration Tests (20%):** Validamos que el repositorio realmente guarde en SQLite (o en una base de pruebas).
 
 **E2E Tests (10%):** Probamos el flujo completo desde el controlador hasta la respuesta HTTP usando supertest.
+
+---
+
+## Hito 14: Documentación Viva (Swagger & Estándares)
+Un sistema Senior no está terminado hasta que otros desarrolladores pueden entender cómo usarlo sin leer el código fuente. Según el Manifiesto de Arquitectura, la documentación debe ser automática y estar vinculada al código.
+
+**Concepto Teórico: OpenAPI (Swagger)**
+OpenAPI es el estándar de la industria para describir APIs REST.
+
+**Contrato de API:** Swagger genera una interfaz web interactiva donde puedes probar los endpoints.
+
+**Decoradores de Metadatos:** Usaremos decoradores como `@ApiProperty`, `@ApiOperation` y `@ApiResponse` para enriquecer la documentación directamente en los DTOs y Controladores.
+
+---
+
+## Hito 15: Empaquetado de Grado Producción (Dockerización)
+Siguiendo tu documento de Estándares de Despliegue: Docker & Kubernetes, no podemos simplemente usar una imagen pesada de Node.js. Un Senior optimiza por seguridad y tamaño.
+
+**Concepto Teórico: Multi-Stage Builds y Seguridad**
+**Multi-Stage Build:** Usamos una etapa para compilar (donde están las herramientas de TS y devDependencies) y otra etapa limpia para ejecutar (donde solo está el código compilado y dependencias de producción).
+
+**Principio de Menor Privilegio:** Por defecto, Docker corre como root. Cambiaremos al usuario `node` para que si alguien hackea el contenedor, no tenga control sobre el sistema operativo anfitrión.
+
+**Tamaño de Imagen:** Usaremos imágenes tipo Alpine o Slim para pasar de gigabytes a unos pocos megabytes.

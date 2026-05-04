@@ -10,6 +10,7 @@ import {
   BadRequestException,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiHeader } from '@nestjs/swagger';
 import { WithdrawMoneyService } from '../../application/withdraw-money.service';
 import { GetAccountBalanceService } from '../../application/get-account-balance.service';
 import { CreateAccountService } from '../../application/create-account.service';
@@ -19,6 +20,7 @@ import { WithdrawDto } from './dto/withdraw.dto';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { AccountOwnerGuard } from '../guards/account-owner.guard';
 
+@ApiTags('accounts')
 @Controller('accounts')
 export class AccountsController {
   constructor(
@@ -29,6 +31,12 @@ export class AccountsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Crear una nueva cuenta bancaria' })
+  @ApiResponse({
+    status: 201,
+    description: 'La cuenta ha sido creada exitosamente.',
+  })
+  @ApiResponse({ status: 400, description: 'Parámetros inválidos.' })
   async createAccount(@Body() createAccountDto: CreateAccountDto) {
     try {
       const account = await this.createAccountService.execute(
@@ -45,6 +53,9 @@ export class AccountsController {
 
   @Get(':id/balance')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Obtener el balance de una cuenta' })
+  @ApiResponse({ status: 200, description: 'Balance obtenido con éxito.' })
+  @ApiResponse({ status: 404, description: 'Cuenta no encontrada.' })
   async getBalance(@Param('id') id: string) {
     try {
       const balance = await this.getAccountBalanceService.execute(id);
@@ -62,6 +73,22 @@ export class AccountsController {
   @Post(':id/withdraw')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AccountOwnerGuard)
+  @ApiOperation({ summary: 'Realizar un retiro de una cuenta' })
+  @ApiHeader({
+    name: 'x-user-id',
+    description: 'ID del usuario que realiza la operación (dueño de la cuenta)',
+    required: true,
+  })
+  @ApiResponse({ status: 200, description: 'Retiro exitoso.' })
+  @ApiResponse({
+    status: 400,
+    description: 'Fondos insuficientes o parámetros inválidos.',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Acceso denegado. El usuario no es el dueño de la cuenta.',
+  })
+  @ApiResponse({ status: 404, description: 'Cuenta no encontrada.' })
   async withdraw(
     @Param('id') id: string,
     @Body() withdrawDto: WithdrawDto,

@@ -1,16 +1,24 @@
 services:
-  postgres:
-    image: postgres:15
+  # Base de Datos - Hostname: db
+  db:
+    image: postgres:15-alpine
     container_name: hexabank-postgres
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: hexabank
+      POSTGRES_DB: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql # <--- Script mágico
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
+  # Mensajería - Hostname: kafka
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     container_name: hexabank-kafka
@@ -31,6 +39,22 @@ services:
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
       KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
       CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+
+  # Aplicación NestJS - Hostname: app
+  app:
+    build: .
+    container_name: hexabank-core
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=dev
+    env_file:
+      - envs/.env.dev
+    depends_on:
+      db:
+        condition: service_healthy
+      kafka:
+        condition: service_started
 
 volumes:
   postgres_data:

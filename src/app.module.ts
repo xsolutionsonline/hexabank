@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath: `envs/.env.${process.env.NODE_ENV || 'local'}`,
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
@@ -21,7 +22,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
             type: 'sqlite',
             database: configService.get<string>('DB_DATABASE') || 'hexabank.db',
             entities: [__dirname + '/**/*.orm-entity{.ts,.js}'],
-            synchronize: true, // Cambiar a false en producción
+            synchronize: configService.get<string>('NODE_ENV') !== 'prod', // False en producción
           };
         }
 
@@ -33,7 +34,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           password: configService.get<string>('DB_PASSWORD') || 'postgres',
           database: configService.get<string>('DB_DATABASE') || 'hexabank',
           entities: [__dirname + '/**/*.orm-entity{.ts,.js}'],
-          synchronize: true, // Cambiar a false en producción
+          synchronize: configService.get<string>('NODE_ENV') !== 'prod', // False en producción
         };
       },
     }),
