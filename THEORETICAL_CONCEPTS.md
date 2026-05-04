@@ -96,3 +96,39 @@ Según nuestro documento de Microservicios y Escalabilidad, cuando un sistema cr
 * El microservicio de Notifications será el Consumidor: escuchará ese evento y enviará el aviso.
 
 **Kafka como Message Broker:** Es el estándar de oro para alta concurrencia. Kafka guarda los eventos en un log, permitiendo que si un servicio se apaga, al encenderse pueda procesar lo que tiene pendiente (resiliencia).
+
+---
+
+## Hito 8: Seguridad y el Guard de Propiedad (ABAC)
+**Concepto Teórico: Guards (Los Centinelas)**
+Según nuestro documento de Guards:
+
+**Responsabilidad:** Los Guards determinan si una petición cumple con las condiciones de seguridad antes de llegar al controlador. Son los porteros del sistema.
+
+**ExecutionContext:** A diferencia de los middleware tradicionales, los Guards tienen acceso al contexto completo de ejecución. Esto nos permite inspeccionar dinámicamente parámetros de la ruta (params), cabeceras (headers) y el cuerpo del mensaje (body).
+
+**ABAC (Attribute-Based Access Control):** Es un modelo de control de acceso donde el permiso se otorga basado en la comparación de atributos. Por ejemplo: asegurar que el atributo "ID del usuario autenticado" (simulado o real) coincida exactamente con el atributo "ID del dueño de la cuenta" sobre la que se intenta realizar una transacción. En un banco, no basta con saber que la cuenta existe y tiene fondos; debemos garantizar irrefutablemente que quien pide el dinero es el dueño legítimo de dicha cuenta.
+
+---
+
+## Hito 9: Interceptors y Estandarización de Respuestas
+**Concepto Teórico: Interceptors (Los Transformadores)**
+Según nuestro documento de Interceptors:
+
+**AOP (Aspect-Oriented Programming):** Los interceptores permiten separar lógicas transversales (como el logging o la transformación de datos) de la lógica de negocio.
+
+**Manipulación de Flujo:** Pueden transformar el resultado devuelto por un controlador antes de que llegue al cliente, o incluso manejar excepciones de forma elegante.
+
+**Senior Standard:** En un sistema profesional, el cliente siempre debe recibir una estructura de respuesta predecible (ej. `{ data: ..., meta: ... }`), sin importar qué controlador responda.
+
+---
+
+## Hito 10: Procesamiento en Lote (Transactions)
+Actualmente, restamos el dinero y enviamos a Kafka. Pero, ¿qué pasa si el sistema debe procesar 100 retiros al mismo tiempo? Un Senior debe dominar las Transacciones de Base de Datos.
+
+**Concepto Teórico: Atomicidad (ACID)**
+Basándonos en nuestro Manifiesto de Arquitectura:
+
+**Todo o Nada:** Si el balance se descuenta pero el guardado de un log de auditoría falla, la transacción completa debe revertirse (Rollback).
+
+**Race Conditions:** Evitaremos que dos retiros simultáneos sobre la misma cuenta dejen el balance en negativo.

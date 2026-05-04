@@ -7,11 +7,12 @@ import { WithdrawMoneyService } from './application/withdraw-money.service';
 import { GetAccountBalanceService } from './application/get-account-balance.service';
 import { CreateAccountService } from './application/create-account.service';
 import { AccountOrmEntity } from './infrastructure/persistence/account.orm-entity';
+import { TransactionOrmEntity } from './infrastructure/persistence/transaction.orm-entity';
 import { TypeOrmAccountRepository } from './infrastructure/persistence/typeorm-account.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AccountOrmEntity]),
+    TypeOrmModule.forFeature([AccountOrmEntity, TransactionOrmEntity]),
     ClientsModule.registerAsync([
       {
         name: 'KAFKA_CLIENT',

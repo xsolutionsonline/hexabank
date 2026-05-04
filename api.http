@@ -10,9 +10,19 @@ Content-Type: application/json
 ### Obtener saldo de una cuenta por ID (reemplazar con el ID devuelto al crear la cuenta)
 GET http://localhost:3000/accounts/c413000f-cd49-4041-94bd-d775bde117ae/balance
 
-### Realizar retiro de dinero (reemplazar con el ID devuelto al crear la cuenta)
+### Realizar retiro de dinero EXITOSO (Debe incluir el x-user-id correcto)
 POST http://localhost:3000/accounts/c413000f-cd49-4041-94bd-d775bde117ae/withdraw
 Content-Type: application/json
+x-user-id: user-1234
+
+{
+  "amount": 50
+}
+
+### Realizar retiro de dinero DENEGADO (Simulando un atacante con otro user-id)
+POST http://localhost:3000/accounts/c413000f-cd49-4041-94bd-d775bde117ae/withdraw
+Content-Type: application/json
+x-user-id: hacker-007
 
 {
   "amount": 50

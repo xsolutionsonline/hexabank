@@ -8,6 +8,7 @@ import {
   HttpStatus,
   NotFoundException,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { WithdrawMoneyService } from '../../application/withdraw-money.service';
 import { GetAccountBalanceService } from '../../application/get-account-balance.service';
@@ -16,6 +17,7 @@ import { AccountNotFoundException } from '../../domain/exceptions/account-not-fo
 import { InsufficientFundsException } from '../../domain/exceptions/insufficient-funds.exception';
 import { WithdrawDto } from './dto/withdraw.dto';
 import { CreateAccountDto } from './dto/create-account.dto';
+import { AccountOwnerGuard } from '../guards/account-owner.guard';
 
 @Controller('accounts')
 export class AccountsController {
@@ -59,6 +61,7 @@ export class AccountsController {
 
   @Post(':id/withdraw')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AccountOwnerGuard)
   async withdraw(
     @Param('id') id: string,
     @Body() withdrawDto: WithdrawDto,
