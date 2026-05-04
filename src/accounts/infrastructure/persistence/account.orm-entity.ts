@@ -1,4 +1,5 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
+import { TransactionOrmEntity } from './transaction.orm-entity';
 
 @Entity('accounts')
 export class AccountOrmEntity {
@@ -10,4 +11,7 @@ export class AccountOrmEntity {
 
   @Column()
   ownerId: string;
+
+  @OneToMany(() => TransactionOrmEntity, (transaction) => transaction.account)
+  transactions: TransactionOrmEntity[];
 }
