@@ -132,3 +132,41 @@ Basándonos en nuestro Manifiesto de Arquitectura:
 **Todo o Nada:** Si el balance se descuenta pero el guardado de un log de auditoría falla, la transacción completa debe revertirse (Rollback).
 
 **Race Conditions:** Evitaremos que dos retiros simultáneos sobre la misma cuenta dejen el balance en negativo.
+
+---
+
+## Hito 11: Estandarización de Errores (Global Filters)
+**Concepto Teórico: Exception Filters**
+Según nuestro documento Exception filters:
+
+**Capa de Excepción:** Nest tiene una capa integrada que atrapa automáticamente todas las excepciones no manejadas en el sistema.
+
+**Control Total:** Los filtros nos permiten interceptar este flujo por defecto y tener un control absoluto sobre el contenido de la respuesta enviada al cliente cuando algo sale mal.
+
+**Senior Standard:** En un ecosistema profesional, así como el éxito se estandariza (Hito 9), todos los errores deben tener el mismo formato para que el Frontend o los clientes de la API sepan siempre cómo leerlos predeciblemente (ej. `{ success: false, error: ..., timestamp: ... }`).
+
+---
+
+## Hito 12: Integridad Financiera (Transacciones)
+Ahora que los errores se ven bien, hagamos que el banco sea seguro ante fallos.
+
+**Concepto Teórico: Atomicidad y Rollback**
+Basado en el documento Construyendo HexaBank:
+
+**Transacción:** Si un proceso tiene 3 pasos (1. Restar balance, 2. Crear log, 3. Notificar), y el paso 2 falla, el paso 1 debe deshacerse.
+
+**Database Consistency:** Nunca debe haber un retiro sin su correspondiente registro en la tabla de transacciones. Esto garantiza que el dinero no se "pierda" en el limbo digital si ocurre un fallo interno a mitad del proceso.
+
+---
+
+## Hito 13: Testing de Calidad (Nivel Senior)
+Según el Documento Estándares de Testing y Calidad, no podemos enviar este código a producción sin pruebas automatizadas. Un Senior no pregunta "¿funciona?", sino "¿tengo un test que pruebe que funciona?".
+
+**Concepto Teórico: La Pirámide de Pruebas**
+Basándonos en nuestros documentos:
+
+**Unit Tests (60-70%):** Prueban el `WithdrawMoneyService` de forma aislada. Aquí mockeamos el repositorio y el cliente de Kafka. No tocamos la base de datos real.
+
+**Integration Tests (20%):** Validamos que el repositorio realmente guarde en SQLite (o en una base de pruebas).
+
+**E2E Tests (10%):** Probamos el flujo completo desde el controlador hasta la respuesta HTTP usando supertest.

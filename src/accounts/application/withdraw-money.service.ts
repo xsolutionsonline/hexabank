@@ -58,7 +58,7 @@ export class WithdrawMoneyService {
       // Si ocurre un error, revertimos todos los cambios
       await queryRunner.rollbackTransaction();
       this.logger.error('Transaction failed, rolling back...', err);
-      throw err;
+      throw err; // El filtro global capturará este error y lo devolverá formateado al cliente
     } finally {
       // Siempre debemos liberar el queryRunner
       await queryRunner.release();
@@ -69,8 +69,8 @@ export class WithdrawMoneyService {
     try {
       // 4. Kafka es un sistema externo, el evento debe ir DESPUÉS del commit de la BD
       this.client.emit('money.withdrawn', event).subscribe({
-        next: () => console.log('✅ Evento enviado a Kafka con éxito'),
-        error: (err) => console.error('❌ Error enviando a Kafka:', err),
+        next: () => this.logger.log('✅ Evento enviado a Kafka con éxito'),
+        error: (err) => this.logger.error('❌ Error enviando a Kafka:', err),
       });
     } catch (error) {
       this.logger.error('Kafka unreachable, event queued for retry', error);

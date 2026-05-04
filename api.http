@@ -16,7 +16,7 @@ Content-Type: application/json
 x-user-id: user-1234
 
 {
-  "amount": 50
+  "amount": 55550
 }
 
 ### Realizar retiro de dinero DENEGADO (Simulando un atacante con otro user-id)
